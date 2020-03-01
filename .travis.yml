@@ -15,5 +15,6 @@ install:
   - yarn
 script:
   - npm install codecov -g
-  - npm run cover
-  - codecov -f coverage/**/*.json
+  - npm run test
+
+after_success: codecov
