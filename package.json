@@ -1,22 +1,26 @@
 {
   "name": "courseorg",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node src/App.js",
     "test": "nyc --reporter html --reporter json --reporter text npm run tests && nyc report --reporter=text-lcov > coverage.lcov",
-    "tests": "mocha ./test/**/*.ts --require ts-node/register --timeout 10000",
+    "tests": "mocha ./test/**/*.ts --require ts-node/register --timeout 100000",
     "build": "tsc"
   },
   "dependencies": {
     "@types/chai": "^4.2.9",
     "@types/mocha": "^7.0.1",
+    "@types/node-fetch": "^2.5.5",
     "chai": "^4.2.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "mocha": "^7.1.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "node-fetch": "^2.6.0",
+    "node-html-parser": "^1.2.13",
+    "parse5": "^5.1.1"
   },
   "devDependencies": {
     "nyc": "^15.0.0",
