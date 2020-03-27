@@ -7,4 +7,7 @@ export enum Terms {
     'T2020W' = '2020W'
 }
 
-
+export interface CourseInfo {
+    subject: string;
+    course_id: string;
+}
