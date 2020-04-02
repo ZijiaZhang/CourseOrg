@@ -7,25 +7,20 @@ import {parse, HTMLElement} from 'node-html-parser';
 import {HTMLParseException} from "../../Exceptions";
 
 export class Grabber {
-    constructor(){
-
-    }
 
     public static getCourse(course: CourseInfo): Promise<string[]> {
         return new Promise<string[]>((resolve) => {
             fetch(Grabber.getCourseURL(course)).then(
                 (data: Response) => {
                     data.text().then (
-                        (text) => 
+                        (text) =>
                             Grabber.getCourseFromData(text).then(
-                                (result) => 
+                                (result) =>
                                     resolve(result)
                             )
                     )
                 }
-            ).catch(() => {
-
-            });
+            )
         });
     }
 
@@ -38,9 +33,7 @@ export class Grabber {
                             Grabber.getSubjectsFromData(text).then(
                                 (result) =>
                                     resolve(result))
-            )).catch(()=> {
-                
-            });
+            ))
         });
     }
 
@@ -51,8 +44,8 @@ export class Grabber {
     }
 
     public static getCourseURL(course: CourseInfo): string {
-        const dept = course.subject;
-        const courseNum = course.course_id;
+        let dept = course.subject;
+        let courseNum = course.course_id;
         return `https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=${dept}&course=${courseNum}`;
     }
 
@@ -79,11 +72,12 @@ export class Grabber {
             if (table != null) {
                 let sectionElements = table.querySelectorAll('tr');
                 let sectionTexts = sectionElements.map((elem) => elem.querySelector('td a'));
-                let texts = sectionTexts.filter((elem) => elem instanceof HTMLElement).map((elem) => elem.childNodes[0].rawText);
+                let texts = sectionTexts
+                    .filter((elem) => elem instanceof HTMLElement)
+                    .map((elem) => elem.childNodes[0].rawText);
                 return resolve(texts);
             }
             return reject(new HTMLParseException());
         })
-       
     }
 }
