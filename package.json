@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/App.js",
-    "test": "nyc --reporter html --reporter json --reporter text npm run tests && nyc report --reporter=text-lcov > coverage.lcov",
+    "test": "tslint **/*.ts && nyc --reporter html --reporter json --reporter text npm run tests && nyc report --reporter=text-lcov > coverage.lcov",
     "tests": "mocha ./test/**/*.ts --require ts-node/register --timeout 100000",
     "build": "tsc"
   },
@@ -25,6 +25,7 @@
   "devDependencies": {
     "nyc": "^15.0.0",
     "ts-node": "^8.6.2",
+    "tslint": "^6.1.1",
     "typescript": "^3.8.3"
   }
 }
