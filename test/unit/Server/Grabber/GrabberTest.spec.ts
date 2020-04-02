@@ -1,7 +1,8 @@
 import {Grabber} from "../../../../src/Server/Grabber/Grabber";
 import {Terms, CourseInfo} from "../../../../src/Shared/SharedData";
 import {expect} from 'chai'
-import {HTMLParseException} from '../../../../src/Exceptions';
+import {HTMLFetchException} from "../../../../src/Exceptions/HTMLFetchException";
+import {HTMLParseException} from "../../../../src/Exceptions/HTMLParseException";
 
 describe("GrabberTest", function () {
     describe("Fetch term", () => {
@@ -13,6 +14,14 @@ describe("GrabberTest", function () {
             return Grabber.getSubjects(Terms.T2020S).then( (data)=> {
                 expect(data.length).equals(262);
                 expect(data).contains('CPSC');
+            });
+        });
+
+        it("Should raise error when fail to fetch ", function () {
+            return Grabber.getSubjects(Terms.T2019S).then( ()=> {
+                expect.fail("Should not resolve")
+            }).catch((err) => {
+                expect(err).instanceOf(HTMLFetchException)
             });
         });
 
