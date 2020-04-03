@@ -4,14 +4,18 @@ import fetch from 'node-fetch';
 import {Response} from "node-fetch";
 
 import {parse, HTMLElement} from 'node-html-parser';
-import {HTMLParseException} from "../../Exceptions";
+import {HTMLFetchException} from "../../Exceptions/HTMLFetchException";
+import {HTMLParseException} from "../../Exceptions/HTMLParseException";
 
 export class Grabber {
 
     public static getCourse(course: CourseInfo): Promise<string[]> {
-        return new Promise<string[]>((resolve) => {
+        return new Promise<string[]>((resolve, reject) => {
             fetch(Grabber.getCourseURL(course)).then(
                 (data: Response) => {
+                    if(data.status!==200) {
+                        return reject(new HTMLFetchException())
+                    }
                     data.text().then (
                         (text) =>
                             Grabber.getCourseFromData(text).then(
@@ -20,20 +24,29 @@ export class Grabber {
                             )
                     )
                 }
-            )
+            ).catch((err) => {
+                reject(err)
+            });
         });
     }
 
     public static getSubjects(term: Terms): Promise<string[]>{
-        return new Promise<string[]>((resolve) => {
-            fetch(Grabber.getTermURL(term)).then(
-                (data: Response) =>
-                    data.text().then(
+        return new Promise<string[]>((resolve, reject) => {
+            fetch(Grabber.getTermURL(term))
+                .then(
+                (data: Response) => {
+                    if(data.status!==200) {
+                        return reject(new HTMLFetchException())
+                    }
+                    return data.text().then(
                         (text) =>
                             Grabber.getSubjectsFromData(text).then(
                                 (result) =>
-                                    resolve(result))
-            ))
+                                    resolve(result)))
+                })
+                .catch((err)=> {
+                reject(err)
+            });
         });
     }
 
