@@ -10,4 +10,11 @@ export enum Terms {
 export interface CourseInfo {
     subject: string;
     course_id: string;
+    term?: Terms,
+    sections: Section[]
+}
+
+export interface Section {
+    section_id: string;
+    activity_type: string;
 }

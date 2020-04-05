@@ -1,5 +1,5 @@
 import {Grabber} from "../../../../src/Server/Grabber/Grabber";
-import {Terms, CourseInfo} from "../../../../src/Shared/SharedData";
+import {Terms, CourseInfo, Section} from "../../../../src/Shared/SharedData";
 import {expect} from 'chai'
 import {HTMLFetchException} from "../../../../src/Exceptions/HTMLFetchException";
 import {HTMLParseException} from "../../../../src/Exceptions/HTMLParseException";
@@ -35,22 +35,21 @@ describe("GrabberTest", function () {
     });
 
     describe("Fetch Course", () => {
+        const mockCourse = "CPSC 100";
+
         it("Return correct course URL", () => {
-            const course: CourseInfo = {
-                subject: "CPSC",
-                course_id: "100"
-            };
-            expect(Grabber.getCourseURL(course)).equals('https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=CPSC&course=100');
+            expect(Grabber.getCourseURL(mockCourse)).equals('https://courses.students.ubc.ca/cs/courseschedule?pname=subjarea&tname=subj-course&dept=CPSC&course=100');
         });
 
         it("Return all sections of the course", () => {
-             const course: CourseInfo = {
-                subject: "CPSC",
-                course_id: "100"
-            };
-            return Grabber.getCourse(course).then((data) => {
-                expect(data.length).equals(45);
-                expect(data).contains('CPSC 100 101');
+            return Grabber.getCourse(mockCourse).then((data) => {
+                const mockSection: Section = {
+                    section_id: '101',
+                    activity_type: 'Lecture'
+                }
+                expect(data.subject).equals('CPSC');
+                expect(data.course_id).equals('100');
+                expect(data.sections).contains(mockSection);
             })
         });
 
@@ -62,4 +61,35 @@ describe("GrabberTest", function () {
             )
         });
     });
+    describe("Fetch Course In Session", () => {
+        const mockCourse = "CPSC 100";
+
+        it("Return correct course URL", () => {
+            
+            expect(Grabber.getCourseInSessionURL(mockCourse, Terms.T2019W)).equals('https://courses.students.ubc.ca/cs/courseschedule?sesscd=W&pname=subjectarea&tname=subj-course&course=100&sessyr=2019&dept=CPSC');
+        });
+
+        it("Return Exception when term is not defined", () => {
+            return Grabber.getCourseInSession(mockCourse, undefined).then(() => {
+                () => expect.fail('Should not resolve')
+            }).catch(e => expect(e).instanceOf(HTMLFetchException));
+        });
+
+        it("Return all sections of the course", () => {
+            return Grabber.getCourseInSession(mockCourse, Terms.T2019W).then((data) => {
+                expect(data.subject).equals('CPSC');
+                expect(data.course_id).equals('100');
+                expect(data.term).equals(Terms.T2019W);
+            })
+        });
+
+        it("Reject if fail", () => {
+            return Grabber.getCourseFromData('InvalidHTML').then(
+                () => expect.fail('Should not resolve')
+            ).catch(
+                (error) => expect(error).instanceOf(HTMLParseException)
+            )
+        });
+    });
+
 });
