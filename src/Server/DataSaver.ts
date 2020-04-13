@@ -29,3 +29,8 @@ export class DataSaver{
         });
     }
 }
+
+export enum FileNames {
+    TermSubjects = "TermSubject.json",
+    SubjectCourse = "SubjectCourse.json"
+}

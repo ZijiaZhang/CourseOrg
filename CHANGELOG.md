@@ -1,5 +1,9 @@
 #Change Log
 
+##[0.4.0] 2020/04/12
+### Added
+- Add initialize core data
+
 ##[0.3.0] 2020/04/07
 ### Added
 - Add saver and loader to store the file locally

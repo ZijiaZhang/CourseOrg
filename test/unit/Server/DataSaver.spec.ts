@@ -4,6 +4,7 @@ import {DataSaver} from "../../../src/Server/DataSaver";
 import * as fs from "fs";
 import {FileReadException} from "../../../src/Exceptions/FileReadException";
 import {FileWriteException} from "../../../src/Exceptions/FileWriteException";
+import {setTestFileContent} from "../../TestUtil";
 
 class TestData extends Base {
     a = 10;
@@ -51,9 +52,9 @@ describe("DataSaver Test", function () {
                 expect.fail();
             })
         }).catch(() => {
+            setTestFileContent('test_data2.json', '{\n "a":30\n}\n');
             expect.fail();
-        });
-
+        }).then(() => setTestFileContent('test_data2.json', '{\n "a":30\n}\n'));
     });
 
     it("Save fail", function () {

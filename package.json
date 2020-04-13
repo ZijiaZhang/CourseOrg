@@ -1,11 +1,11 @@
 {
   "name": "courseorg",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "start": "node src/App.js",
     "test": "tslint **/*.ts && nyc --reporter html --reporter json --reporter text npm run tests && nyc report --reporter=text-lcov > coverage.lcov",
-    "tests": "mocha ./test/**/*.ts --require ts-node/register --timeout 100000",
+    "tests": "mocha './test/**/*.spec.ts' --require ts-node/register --timeout 100000 --recursive",
     "build": "tsc"
   },
   "dependencies": {
