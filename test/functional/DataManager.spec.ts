@@ -4,7 +4,7 @@ import {expect} from "chai";
 import * as fs from "fs"
 import {deleteTestDataFile} from "../TestUtil";
 
-describe("Scheduler Test", function () {
+describe("DataManager Test", function () {
     it("Should Fetch Data", () => {
         return DataManager.initializeCoreData(Terms.T2020S, 'test/test_initialize.json')
             .then(() => {
